@@ -2,6 +2,8 @@
 // dark mode 0xff363f58
 import 'package:flutter/material.dart';
 
+import 'style/colorTheme.dart';
+
 enum CalculatorMode { NORMAL, PROGRAMMER, SCIENTIST }
 
 class MyCalculator extends StatefulWidget {
@@ -11,11 +13,12 @@ class MyCalculator extends StatefulWidget {
 
 class _MyCalculatorState extends State<MyCalculator> {
   CalculatorMode calculatorMode = CalculatorMode.NORMAL;
-  bool themeMode = false; //light = false, dark = true
+  ThemeWidget _themeWidget = ThemeWidget(true);
+  //light = true, dark = false
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        backgroundColor: !themeMode ? Color(0xffe1e1e1) : Color(0xff363f58),
+        backgroundColor: _themeWidget.mainThemeColor(),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -29,10 +32,10 @@ class _MyCalculatorState extends State<MyCalculator> {
               Align(
                 alignment: Alignment.topLeft,
                 child: IconButton(
-                  icon: Icon(!themeMode ? Icons.wb_sunny : Icons.brightness_2),
+                  icon: _themeWidget.iconTheme(),
                   onPressed: () {
                     setState(() {
-                      themeMode = !themeMode;
+                      _themeWidget.setThemeMode(!_themeWidget.getThemeMode());
                     });
                   },
                 ),
@@ -43,6 +46,22 @@ class _MyCalculatorState extends State<MyCalculator> {
                   width: MediaQuery.of(context).size.width,
                   height: MediaQuery.of(context).size.height * 0.6,
                   color: Colors.red,
+                  child: Table(
+                    border: TableBorder.all(
+                        width: MediaQuery.of(context).size.width * 0.01,
+                        color: Colors.black),
+                    children: [
+                      for (var i = 5; i >= 0; i--)
+                        TableRow(children: [
+                          for (var i = 0; i < 4; i++)
+                            Container(
+                              width: MediaQuery.of(context).size.width * 0.225,
+                              height: MediaQuery.of(context).size.width * 0.225,
+                              color: Colors.white,
+                            )
+                        ])
+                    ],
+                  ),
                 ),
               )
             ],
